@@ -191,6 +191,8 @@ function generateTestCases()
 	console.log("FINAL, before sync write: -----");
 	//console.log(content);
 	console.log("end content----");
+	content += "subject.format('111', 'asd', 'foo');\n";
+	content += "subject.blackListNumber('(212) 123-1234');\n";
 	fs.writeFileSync('test.js', content, "utf8");
 
 }
@@ -260,7 +262,30 @@ function constraints(filePath)
 					}
 				}
 
-				
+//				if(child.type = "LogicalExpression")
+//				{
+//					console.log(child);
+//					if( params.indexOf( child.left.name ) > -1)
+//					{
+//						console.log("@@@@###############################");
+//						console.log(child.left.name);
+////						var rightHand = buf.substring(child.right.range[0], child.right.range[1])
+////						if( child.operator === "==")
+////						{
+////							// get expression from original source code:
+////							//var expression = buf.substring(child.range[0], child.range[1]);
+////							pushConstraint(funcName, child.left.name, rightHand);
+////							pushConstraint(funcName, child.left.name, -1);
+////						}
+////						else if( child.operator === "<")
+////						{
+////							pushConstraint(funcName, child.left.name, rightHand);
+////							pushConstraint(funcName, child.left.name, rightHand-1);
+////							
+////						}
+//					}
+//				}
+//				
 
 				if( child.type == "CallExpression" && 
 					 child.callee.property &&

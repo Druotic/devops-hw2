@@ -19,3 +19,5 @@ mock.restore();
 subject.normalize('');
 subject.format('','','');
 subject.blackListNumber('');
+subject.format('111', 'asd', 'foo');
+subject.blackListNumber('(212) 123-1234');
