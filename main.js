@@ -65,7 +65,6 @@ function generateTestCases()
 			params[paramName] = '\'\'';
 		}
 
-		console.log( "params: " );
 		console.log( params );
 
 		// update parameter values based on known constraints.
@@ -87,9 +86,6 @@ function generateTestCases()
 			{
 				if (Object.keys(new_constraints[new_c])[0] === constraint.ident)
 				{
-					console.log("@");
-					console.log(new_constraints);
-					console.log(new_constraints[new_c]);
 					var e = new_constraints[new_c];
 					e[constraint.ident] = e[constraint.ident].concat(constraint.value);
 					new_constraints[new_c] = e;
@@ -125,36 +121,14 @@ function generateTestCases()
 			constraints = constraints.concat(assoc);
 		}
 
-
-		console.log("params:");
-		console.log(_.pairs(params));
-		console.log("-----");
-		console.log(constraints);
-		console.log("---sorted:");
-//		constraints = ([ {q: [ 'undefined', -1 ]}, {p: [ '\'\'' ]} ]);
-		
-		
 		// get array of keys for sorting of arguments
 		var sorted_keys = _.pairs(params).map(function (p) {return p[0]});
-		
-		for(var key in constraints)
-		{
-			console.log(key);
-			console.log(sorted_keys.indexOf(key));
-		}
-		//constraints.forEach(function(c1, c2){process.exit(c1); console.log(c2);});
-		console.log(constraints.sort(
+
+		constraints.sort(
 			function(c1, c2){
-				console.error("test");
 				return sorted_keys.indexOf(Object.keys(c1)[0]) - sorted_keys.indexOf(Object.keys(c2)[0]);
-			}));
+			});
 		
-//		process.exit(1);
-		console.log(constraints instanceof Array);
-		console.log("-----!!!!!!!!!!!!!!!!!!!!!!!!");
-		console.log(
-		cartesianProductOf.apply(this, constraints.map(function (k){return k[Object.keys(k)[0]]}))
-);
 
 
 		var argArrays = cartesianProductOf.apply(this, constraints.map(function (k){return k[Object.keys(k)[0]]}));
@@ -163,9 +137,6 @@ function generateTestCases()
 			if(!(pathExists || fileWithContent))
 				content += "subject.{0}({1});\n".format(funcName, args );
 		}
-
-		console.log("TESTINGIGIGNINGG:");
-		console.log(params);
 
 		// Hardcoded args for file existence cases.  This should really be redone. The overall
 		// structure of the params vs constraints arrays was originally bad for having multiple 
@@ -188,9 +159,6 @@ function generateTestCases()
 
 	}
 
-	console.log("FINAL, before sync write: -----");
-	//console.log(content);
-	console.log("end content----");
 	content += "subject.format('111', 'asd', 'foo');\n";
 	content += "subject.blackListNumber('(212) 123-1234');\n";
 	fs.writeFileSync('test.js', content, "utf8");
@@ -262,31 +230,6 @@ function constraints(filePath)
 					}
 				}
 
-//				if(child.type = "LogicalExpression")
-//				{
-//					console.log(child);
-//					if( params.indexOf( child.left.name ) > -1)
-//					{
-//						console.log("@@@@###############################");
-//						console.log(child.left.name);
-////						var rightHand = buf.substring(child.right.range[0], child.right.range[1])
-////						if( child.operator === "==")
-////						{
-////							// get expression from original source code:
-////							//var expression = buf.substring(child.range[0], child.range[1]);
-////							pushConstraint(funcName, child.left.name, rightHand);
-////							pushConstraint(funcName, child.left.name, -1);
-////						}
-////						else if( child.operator === "<")
-////						{
-////							pushConstraint(funcName, child.left.name, rightHand);
-////							pushConstraint(funcName, child.left.name, rightHand-1);
-////							
-////						}
-//					}
-//				}
-//				
-
 				if( child.type == "CallExpression" && 
 					 child.callee.property &&
 					 child.callee.property.name =="readFileSync" )
@@ -314,8 +257,6 @@ function constraints(filePath)
 					{
 						if( child.arguments[0].name == params[p] )
 						{
-							console.log("HMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM");
-							console.log(params[p]);
 							functionConstraints[funcName].constraints.push( 
 							{
 								// A fake path to a file
@@ -328,9 +269,6 @@ function constraints(filePath)
 				}
 
 			});
-
-			console.log( functionConstraints[funcName]);
-
 		}
 	});
 }
